@@ -1,3 +1,15 @@
+import RightComp from "@/components/RightComp";
+import Canvas from "@/components/ui/Canvas";
+import LeftComp from "@/components/ui/LeftComp";
+
 export default function Home() {
-  return <div></div>;
+  return (
+    <div className="bg-gray-200 w-full min-h-screen  gap-2 mx-auto container px-4 py-6">
+      <div className="grid grid-cols-[1fr_3fr_1fr] ">
+        <LeftComp />
+        <Canvas />
+        <RightComp />
+      </div>
+    </div>
+  );
 }

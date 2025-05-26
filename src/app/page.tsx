@@ -1,6 +1,6 @@
+import Canvas from "@/components/Canvas";
+import LeftComp from "@/components/LeftComp";
 import RightComp from "@/components/RightComp";
-import Canvas from "@/components/ui/Canvas";
-import LeftComp from "@/components/ui/LeftComp";
 
 export default function Home() {
   return (

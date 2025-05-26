@@ -1,7 +1,7 @@
-import { upload, colorPicker, cloud } from "../../public/icons";
+import { upload, colorPicker2, cloud } from "../../public/icons";
 
 export const EditorTabs = [
   { name: "Upload File", icon: upload },
   { name: "Files", icon: cloud },
-  { name: "Upload File", icon: colorPicker },
+  { name: "Colors", icon: colorPicker2 },
 ];

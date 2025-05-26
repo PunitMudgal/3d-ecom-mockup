@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Button } from "./button";
 import { Share2 } from "lucide-react";
+import { Button } from "./ui/button";
 
 export default function Header() {
   return (

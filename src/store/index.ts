@@ -10,9 +10,9 @@ interface store {
 }
 
 export const TheStore = create<store>((set) => ({
-  color: "#ffffff",
+  color: "#F8E71C",
   isLogo: true,
-  logoDecal: "./threejs.png",
+  logoDecal: "./assets/shield.png",
   setColor: (value) => set({ color: value }),
   setIsLogo: (value) => set({ isLogo: value }),
   setLogoDecal: (logoDecal) => set({ logoDecal }),

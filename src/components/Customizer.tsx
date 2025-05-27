@@ -7,7 +7,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Button } from "./ui/button";
 import { Upload } from "lucide-react";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
+import { SketchPicker } from "react-color";
+import type { ColorResult } from "react-color";
+import { TheStore } from "@/store";
 
 interface iLeftCompTab {
   name: string;
@@ -15,6 +18,14 @@ interface iLeftCompTab {
 }
 
 const Customizer = () => {
+  const { color, setColor } = TheStore();
+  const [file, setFile] = useState(null);
+
+  const handleSetPhoto = (e: ChangeEvent<HTMLInputElement>) => {
+    const setlectedFile = e.target.files?.[0];
+    if (setlectedFile) setFile(setlectedFile);
+  };
+
   return (
     <AnimatePresence>
       {/* left customize buttons */}
@@ -64,11 +75,19 @@ const Customizer = () => {
                           height={30}
                           alt="images"
                         />
-                        <Button
-                          // variant="outline"
-                          className="bg-[#3F72AF]"
-                        >
-                          <Upload /> Upload
+                        <input
+                          className="hidden"
+                          type="file"
+                          id="uploadPic"
+                          onChange={handleSetPhoto}
+                        />
+                        <Button className="bg-[#3F72AF]">
+                          <label
+                            htmlFor="uploadPic"
+                            // variant="outline"
+                          >
+                            <Upload /> Upload
+                          </label>
                         </Button>
                         <p className="text-wrap text-xs text-center text-[#3F72AF]">
                           upload in png, jpg, jpeg, svg format{" "}
@@ -78,13 +97,13 @@ const Customizer = () => {
                   </Card>
                 </TabsContent>
 
-                {/* Second card */}
+                {/* Second card Color picker */}
                 <TabsContent value="Files" className="mt-0 h-full">
                   <Card className=" border-gray-400/20 p-2  backdrop-blur-sm bg-gray-900/10 shadow-lg">
                     <CardHeader className="text-xl font-semibold text-center ">
                       Files
                     </CardHeader>
-                    <p className="text-gray-600">Files content goes here...</p>
+                    <CardContent></CardContent>
                   </Card>
                 </TabsContent>
 
@@ -94,9 +113,13 @@ const Customizer = () => {
                     <CardHeader className="text-xl font-semibold text-center">
                       Color Picker
                     </CardHeader>
-                    <p className="text-gray-600">
-                      Color picker content goes here...
-                    </p>
+                    <CardContent>
+                      <SketchPicker
+                        color={color}
+                        disableAlpha
+                        onChange={(color: ColorResult) => setColor(color.hex)}
+                      />
+                    </CardContent>
                   </Card>
                 </TabsContent>
               </div>

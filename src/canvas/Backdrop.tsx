@@ -4,7 +4,7 @@ import { AccumulativeShadows, RandomizedLight } from "@react-three/drei";
 import type { AccumulativeShadowsApi } from "@react-three/drei";
 
 const Backdrop = () => {
-  const shadows = useRef<AccumulativeShadowsApi>(null);
+  const shadows = useRef();
   return (
     <AccumulativeShadows
       ref={shadows}
@@ -18,7 +18,7 @@ const Backdrop = () => {
       <RandomizedLight
         amount={4}
         radius={9}
-        intensity={0.55}
+        intensity={2.1}
         ambient={0.25}
         position={[5, 5, -10]}
       />

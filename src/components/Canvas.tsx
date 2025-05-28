@@ -20,7 +20,7 @@ const CanvasComp = () => {
         <CameraRig>
           <Backdrop />
           <Center>
-            <group position={[0, 0.1, 0]}>
+            <group position={[0, 0.13, 0]}>
               <Shirt />
             </group>
           </Center>

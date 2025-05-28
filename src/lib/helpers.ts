@@ -10,15 +10,15 @@ export const downloadCanvasToImage = () => {
   document.body.removeChild(link);
 };
 
-export const reader = (file) =>
-  new Promise((resolve, reject) => {
+export const reader = (file: File) =>
+  new Promise((resolve) => {
     // todo reject removed from here
     const fileReader = new FileReader();
     fileReader.onload = () => resolve(fileReader.result);
     fileReader.readAsDataURL(file);
   });
 
-export const getContrastingColor = (color) => {
+export const getContrastingColor = (color: string) => {
   // Remove the '#' character if it exists
   const hex = color.replace("#", "");
 

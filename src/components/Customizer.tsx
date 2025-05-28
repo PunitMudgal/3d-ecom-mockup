@@ -35,7 +35,7 @@ const Customizer = () => {
       {/* left customize buttons */}
       <motion.div
         key="custom"
-        className="absolute top-0 left-0 z-10"
+        className="absolute top-0 left-0 z-20"
         {...slideAnimation("left")}
       >
         <div className="flex items-center min-h-screen">
@@ -131,8 +131,10 @@ const Customizer = () => {
           </Tabs>
         </div>
       </motion.div>
-      <motion.div {...slideAnimation("up")} className="z-10">
-        <div className="absolute md:bottom-1 bottom-1/4 md:left-1/3 left-1/4 px-3 py-2 rounded-xl bg-gray-100/70 shadow-xl flex gap-1 items-center">
+
+      {/* Zoom in out buttons */}
+      <motion.div {...slideAnimation("up")} className="z-20">
+        <div className="absolute md:bottom-0 bottom-2 left-1/2  px-3 py-2 rounded-xl bg-gray-100/70 shadow-xl flex gap-1 items-center">
           <Button variant="outline">
             <Plus />
           </Button>
@@ -151,9 +153,11 @@ const Customizer = () => {
           </Toggle>
         </div>
       </motion.div>
+
+      {/* Lock unlock button */}
       <motion.div
         {...slideAnimation("down")}
-        className="absolute top-24 md:left-1/3 left-1/4 z-10 "
+        className="absolute top-2 left-1/2 z-20"
       >
         <LockBtn />
         <Label className="text-center text-xs text-gray-700 ml-2">

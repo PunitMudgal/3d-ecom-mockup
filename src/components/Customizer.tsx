@@ -6,11 +6,15 @@ import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Button } from "./ui/button";
-import { Upload } from "lucide-react";
+import { Eye, Fullscreen, Minus, Plus, Upload } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { SketchPicker } from "react-color";
 import type { ColorResult } from "react-color";
 import { TheStore } from "@/store";
+import { Toggle } from "./ui/toggle";
+import shirtPngLogo from "../../public/icons/shirtPng.png";
+import LockBtn from "./LockBtn";
+import { Label } from "./ui/label";
 
 interface iLeftCompTab {
   name: string;
@@ -19,7 +23,7 @@ interface iLeftCompTab {
 
 const Customizer = () => {
   const { color, setColor } = TheStore();
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<File>();
 
   const handleSetPhoto = (e: ChangeEvent<HTMLInputElement>) => {
     const setlectedFile = e.target.files?.[0];
@@ -39,7 +43,7 @@ const Customizer = () => {
             {/* Left sidebar with vertical tabs */}
             <div className="flex ml-4">
               {/* <div className="w-fit  rounded-2xl shadow-lg m-3 p-1"> */}
-              <TabsList className="flex flex-col h-full bg-gray-100/70 backdrop-blur-md p-1 space-y-2">
+              <TabsList className="flex flex-col h-full bg-gray-100/70  p-1 space-y-2">
                 {EditorTabs.map((tab: iLeftCompTab) => (
                   <TabsTrigger
                     key={tab.name}
@@ -126,6 +130,35 @@ const Customizer = () => {
             </div>
           </Tabs>
         </div>
+      </motion.div>
+      <motion.div {...slideAnimation("up")} className="z-10">
+        <div className="absolute md:bottom-1 bottom-1/4 md:left-1/3 left-1/4 px-3 py-2 rounded-xl bg-gray-100/70 shadow-xl flex gap-1 items-center">
+          <Button variant="outline">
+            <Plus />
+          </Button>
+          <Button variant="outline">
+            <Minus />
+          </Button>
+          <Button variant="outline">
+            <Fullscreen />
+          </Button>
+          <Toggle aria-label="Toggle italic">
+            <Image
+              className="h-10 w-auto"
+              src={shirtPngLogo}
+              alt="toggle-image"
+            />
+          </Toggle>
+        </div>
+      </motion.div>
+      <motion.div
+        {...slideAnimation("down")}
+        className="absolute top-24 md:left-1/3 left-1/4 z-10 "
+      >
+        <LockBtn />
+        <Label className="text-center text-xs text-gray-700 ml-2">
+          3D View
+        </Label>
       </motion.div>
     </AnimatePresence>
   );

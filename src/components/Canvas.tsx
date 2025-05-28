@@ -4,7 +4,6 @@ import { Environment, Center, Loader } from "@react-three/drei";
 import Backdrop from "@/canvas/Backdrop";
 import CameraRig from "@/canvas/CameraRig";
 import Shirt from "@/canvas/Shirt";
-import { Suspense, useEffect, useState } from "react";
 
 const CanvasComp = () => {
   return (
@@ -13,7 +12,7 @@ const CanvasComp = () => {
         shadows
         camera={{ position: [0, 0, 0], fov: 25 }}
         gl={{ preserveDrawingBuffer: true }}
-        className="w-full max-w-full h-full transition-all rounded-2xl ease-in"
+        className="w-full max-w-full transition-all  ease-in"
       >
         <ambientLight intensity={0.5} />
         <Environment preset="city" />
@@ -21,9 +20,9 @@ const CanvasComp = () => {
         <CameraRig>
           <Backdrop />
           <Center>
-            {/* <Suspense fallback={null}> */}
-            <Shirt />
-            {/* </Suspense> */}
+            <group position={[0, 0.1, 0]}>
+              <Shirt />
+            </group>
           </Center>
         </CameraRig>
       </Canvas>

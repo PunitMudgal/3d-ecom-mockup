@@ -19,12 +19,20 @@ import { reader } from "@/lib/helpers";
 
 interface iLeftCompTab {
   name: string;
-  icon: File | string;
+  icon: string;
 }
 
 const Customizer = () => {
-  const { color, setColor, eyeView, setEyeView, setLogoDecal } = TheStore();
-  const [file, setFile] = useState<File>(null);
+  const {
+    color,
+    setColor,
+    eyeView,
+    setEyeView,
+    setLogoDecal,
+    setIsLogo,
+    isLogo,
+  } = TheStore();
+  const [file, setFile] = useState<File | null>(null);
 
   const handleSetPhoto = (e: ChangeEvent<HTMLInputElement>) => {
     const setlectedFile = e.target.files?.[0];
@@ -32,10 +40,13 @@ const Customizer = () => {
   };
 
   const uploadFile = () => {
-    reader(file).then((result) => {
-      console.log("file result in uploadf file", result);
-      setLogoDecal(result);
-      setFile(null);
+    reader(file!).then((result) => {
+      if (typeof result === "string") {
+        setLogoDecal(result);
+        setFile(null);
+      } else {
+        console.error("Invalid image data");
+      }
     });
   };
 
@@ -52,7 +63,6 @@ const Customizer = () => {
             <Tabs>
               {/* Left sidebar with vertical tabs */}
               <div className="flex ml-4">
-                {/* <div className="w-fit  rounded-2xl shadow-lg m-3 p-1"> */}
                 <TabsList className="flex flex-col h-full bg-gray-100/70  p-1 space-y-2">
                   {EditorTabs.map((tab: iLeftCompTab) => (
                     <TabsTrigger
@@ -61,7 +71,7 @@ const Customizer = () => {
                       className="w-16 bg-gray-50 h-16 rounded-xl data-[state=active]:bg-blue-200 flex flex-col items-center justify-center p-2 hover:bg-gray-50"
                     >
                       <Image
-                        src={tab.icon || "/placeholder.svg"}
+                        src={tab.icon}
                         className="h-8 w-8 mb-1"
                         alt={tab.name}
                       />
@@ -71,7 +81,6 @@ const Customizer = () => {
                     </TabsTrigger>
                   ))}
                 </TabsList>
-                {/* </div> */}
 
                 {/* Right content area */}
                 <div className="flex-1 my-4 ml-0">
@@ -112,6 +121,7 @@ const Customizer = () => {
                         <Button
                           variant="secondary"
                           className="w-full"
+                          disabled={!file}
                           onClick={uploadFile}
                         >
                           Upload
@@ -174,7 +184,7 @@ const Customizer = () => {
             <Button onClick={() => setEyeView(!eyeView)} variant="outline">
               <Fullscreen />
             </Button>
-            <Toggle aria-label="Toggle italic">
+            <Toggle onClick={() => setIsLogo(!isLogo)} aria-label="toggle-logo">
               <Image
                 className="h-8 w-auto"
                 src={shirtPngLogo}

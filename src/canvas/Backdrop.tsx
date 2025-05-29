@@ -1,19 +1,27 @@
 "use client";
 import React, { useRef } from "react";
 import { AccumulativeShadows, RandomizedLight } from "@react-three/drei";
-import type { AccumulativeShadowsApi } from "@react-three/drei";
+// import type { AccumulativeShadowsApi } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { TheStore } from "@/store";
 import { easing } from "maath";
 
 const Backdrop = () => {
-  const shadows = useRef();
+  // const shadows = useRef<AccumulativeShadowsApi>(null);
+  const shadows = useRef<React.ElementRef<typeof AccumulativeShadows>>(null);
 
   const { color } = TheStore();
 
-  useFrame((state, delta) =>
-    easing.dampC(shadows.current.getMesh().material.color, color, 0.25, delta)
-  );
+  useFrame((state, delta) => {
+    if (shadows.current && color !== undefined) {
+      easing.dampC(
+        shadows.current.getMesh().material.color,
+        color,
+        0.25,
+        delta
+      );
+    }
+  });
 
   return (
     <AccumulativeShadows

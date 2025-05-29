@@ -10,11 +10,6 @@ export default function Home() {
         <Customizer />
       </div>
       <RightComp />
-      {/* <div className="grid grid-cols-[1fr_3fr_1fr] ">
-        <LeftComp />
-        <CanvasComp />
-        <RightComp />
-      </div> */}
     </div>
   );
 }

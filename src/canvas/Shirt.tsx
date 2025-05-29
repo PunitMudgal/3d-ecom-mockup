@@ -19,9 +19,12 @@ useGLTF.preload("/shirt_baked.glb");
 
 const Shirt = () => {
   const { color, isLogo, logoDecal } = TheStore();
-  const { nodes, materials } = useGLTF("/shirt_baked.glb") as ShirtGLTF;
+  const { nodes, materials } = useGLTF(
+    "/shirt_baked.glb"
+  ) as unknown as ShirtGLTF;
 
   const logoTexture = useTexture(logoDecal);
+  logoTexture.anisotropy = 16; // added here
 
   useFrame((state, delta) => {
     if (materials?.lambert1?.color) {
@@ -46,9 +49,9 @@ const Shirt = () => {
             rotation={[0, 0, 0]}
             scale={0.15}
             map={logoTexture}
-            mapAnisotropy={16}
+            // mapAnisotropy={16}
             depthTest={false}
-            depthWrite={true}
+            // depthWrite={true}
           />
         )}
       </mesh>

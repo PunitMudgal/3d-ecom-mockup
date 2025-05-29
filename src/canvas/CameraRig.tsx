@@ -9,8 +9,6 @@ interface CameraRigProps {
 }
 
 const CameraRig = ({ children }: CameraRigProps) => {
-  // const { color, isLogo, setColor, setIsLogo, logoDecal } = TheStore();
-
   const group = useRef<Group>(null);
 
   useFrame((state, delta) => {

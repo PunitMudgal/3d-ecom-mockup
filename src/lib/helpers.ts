@@ -1,6 +1,6 @@
 export const downloadCanvasToImage = () => {
   const canvas = document.querySelector("canvas");
-  const dataURL = canvas.toDataURL();
+  const dataURL = canvas!.toDataURL();
   const link = document.createElement("a");
 
   link.href = dataURL;
@@ -10,11 +10,11 @@ export const downloadCanvasToImage = () => {
   document.body.removeChild(link);
 };
 
-export const reader = (file: File) =>
-  new Promise((resolve) => {
-    // todo reject removed from here
+export const reader = (file: File): Promise<string | ArrayBuffer | null> =>
+  new Promise((resolve, reject) => {
     const fileReader = new FileReader();
     fileReader.onload = () => resolve(fileReader.result);
+    fileReader.onerror = () => reject(fileReader.error); // optional, for better error handling
     fileReader.readAsDataURL(file);
   });
 

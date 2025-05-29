@@ -16,6 +16,7 @@ import shirtPngLogo from "../../public/icons/shirtPng.png";
 import LockBtn from "./LockBtn";
 import { Label } from "./ui/label";
 import { reader } from "@/lib/helpers";
+import LogoControls from "./LogoControls";
 
 interface iLeftCompTab {
   name: string;
@@ -25,13 +26,16 @@ interface iLeftCompTab {
 const Customizer = () => {
   const {
     color,
-    setColor,
     eyeView,
+    isLogo,
+    setColor,
+    setIsLogo,
     setEyeView,
     setLogoDecal,
-    setIsLogo,
-    isLogo,
+    logoScale,
+    setLogoScale,
   } = TheStore();
+
   const [file, setFile] = useState<File | null>(null);
 
   const handleSetPhoto = (e: ChangeEvent<HTMLInputElement>) => {
@@ -48,6 +52,14 @@ const Customizer = () => {
         console.error("Invalid image data");
       }
     });
+  };
+
+  const increaseScale = () => {
+    setLogoScale(Math.min(logoScale + 0.02, 0.4));
+  };
+
+  const decreaseScale = () => {
+    setLogoScale(Math.max(logoScale - 0.02, 0.05));
   };
 
   return (
@@ -130,6 +142,10 @@ const Customizer = () => {
                     </Card>
                   </TabsContent>
 
+                  <TabsContent value="Logo Controls" className="mt-0 w-full">
+                    <LogoControls />
+                  </TabsContent>
+
                   {/* Files Tab */}
                   <TabsContent value="Files" className="mt-0 h-full">
                     <Card className=" border-gray-400/20 p-2  backdrop-blur-sm bg-gray-900/10 shadow-lg">
@@ -175,10 +191,18 @@ const Customizer = () => {
       {!eyeView && (
         <motion.div {...slideAnimation("up")} key="control-keys">
           <div className="absolute bottom-24 left-1/2  px-3 py-2 rounded-xl bg-gray-100 shadow-xl flex gap-1 items-center z-20">
-            <Button variant="outline">
+            <Button
+              variant="outline"
+              onClick={increaseScale}
+              disabled={!isLogo}
+            >
               <Plus />
             </Button>
-            <Button variant="outline">
+            <Button
+              variant="outline"
+              onClick={decreaseScale}
+              disabled={!isLogo}
+            >
               <Minus />
             </Button>
             <Button onClick={() => setEyeView(!eyeView)} variant="outline">

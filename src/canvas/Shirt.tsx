@@ -18,7 +18,8 @@ interface ShirtGLTF extends GLTF {
 useGLTF.preload("/shirt_baked.glb");
 
 const Shirt = () => {
-  const { color, isLogo, logoDecal } = TheStore();
+  const { color, isLogo, logoDecal, logoPosition, logoScale, logoRotation } =
+    TheStore();
   const { nodes, materials } = useGLTF(
     "/shirt_baked.glb"
   ) as unknown as ShirtGLTF;
@@ -32,7 +33,14 @@ const Shirt = () => {
     }
   });
 
-  const stateString = JSON.stringify({ color, isLogo, logoDecal });
+  const stateString = JSON.stringify({
+    color,
+    isLogo,
+    logoDecal,
+    logoPosition,
+    logoScale,
+    logoRotation,
+  });
 
   return (
     <group key={stateString}>
@@ -45,9 +53,12 @@ const Shirt = () => {
       >
         {isLogo && logoTexture && (
           <Decal
-            position={[0, 0.04, 0.15]}
-            rotation={[0, 0, 0]}
-            scale={0.15}
+            // position={[0, 0.04, 0.15]}
+            // rotation={[0, 0, 0]}
+            // scale={0.15}
+            position={logoPosition}
+            rotation={logoRotation}
+            scale={logoScale}
             map={logoTexture}
             // mapAnisotropy={16}
             depthTest={false}

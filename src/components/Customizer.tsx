@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Button } from "./ui/button";
-import { Eye, Fullscreen, Minus, Plus, Upload } from "lucide-react";
+import { Eye, Fullscreen, Minus, Plus, Upload, RotateCw } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { SketchPicker } from "react-color";
 import type { ColorResult } from "react-color";
@@ -28,12 +28,19 @@ const Customizer = () => {
     color,
     eyeView,
     isLogo,
+    isBackSide,
+    isBackLogo,
+    logoScale,
+    backLogoScale,
     setColor,
     setIsLogo,
+    setIsBackLogo,
     setEyeView,
     setLogoDecal,
-    logoScale,
+    setBackLogoDecal,
     setLogoScale,
+    setBackLogoScale,
+    setIsBackSide,
   } = TheStore();
 
   const [file, setFile] = useState<File | null>(null);
@@ -46,7 +53,12 @@ const Customizer = () => {
   const uploadFile = () => {
     reader(file!).then((result) => {
       if (typeof result === "string") {
-        setLogoDecal(result);
+        // Upload to current side (front or back)
+        if (isBackSide) {
+          setBackLogoDecal(result);
+        } else {
+          setLogoDecal(result);
+        }
         setFile(null);
       } else {
         console.error("Invalid image data");
@@ -55,11 +67,32 @@ const Customizer = () => {
   };
 
   const increaseScale = () => {
-    setLogoScale(Math.min(logoScale + 0.02, 0.4));
+    if (isBackSide) {
+      setBackLogoScale(Math.min(backLogoScale + 0.02, 0.4));
+    } else {
+      setLogoScale(Math.min(logoScale + 0.02, 0.4));
+    }
   };
 
   const decreaseScale = () => {
-    setLogoScale(Math.max(logoScale - 0.02, 0.05));
+    if (isBackSide) {
+      setBackLogoScale(Math.max(backLogoScale - 0.02, 0.05));
+    } else {
+      setLogoScale(Math.max(logoScale - 0.02, 0.05));
+    }
+  };
+
+  const toggleShirtSide = () => {
+    setIsBackSide(!isBackSide);
+  };
+
+  const currentLogoEnabled = isBackSide ? isBackLogo : isLogo;
+  const toggleCurrentLogo = () => {
+    if (isBackSide) {
+      setIsBackLogo(!isBackLogo);
+    } else {
+      setIsLogo(!isLogo);
+    }
   };
 
   return (
@@ -101,6 +134,9 @@ const Customizer = () => {
                     <Card className=" border-gray-400/20 p-2   bg-gray-100/60 shadow-lg ">
                       <CardHeader className="font-semibold text-xl text-center">
                         Upload Image
+                        <div className="text-sm text-gray-600 mt-1">
+                          {isBackSide ? "Back Side" : "Front Side"}
+                        </div>
                       </CardHeader>
                       <CardContent className="w-full">
                         <div className="h-48 w-48 p-2 rounded-xl border-2 border-dashed border-teal-600  flex flex-col gap-2 justify-center items-center">
@@ -136,7 +172,7 @@ const Customizer = () => {
                           disabled={!file}
                           onClick={uploadFile}
                         >
-                          Upload
+                          Upload to {isBackSide ? "Back" : "Front"}
                         </Button>
                       </CardFooter>
                     </Card>
@@ -194,27 +230,39 @@ const Customizer = () => {
             <Button
               variant="outline"
               onClick={increaseScale}
-              disabled={!isLogo}
+              disabled={!currentLogoEnabled}
             >
               <Plus />
             </Button>
             <Button
               variant="outline"
               onClick={decreaseScale}
-              disabled={!isLogo}
+              disabled={!currentLogoEnabled}
             >
               <Minus />
             </Button>
             <Button onClick={() => setEyeView(!eyeView)} variant="outline">
               <Fullscreen />
             </Button>
-            <Toggle onClick={() => setIsLogo(!isLogo)} aria-label="toggle-logo">
+            <Toggle onClick={toggleCurrentLogo} aria-label="toggle-logo">
               <Image
                 className="h-8 w-auto"
                 src={shirtPngLogo}
                 alt="toggle-image"
               />
             </Toggle>
+            <Button
+              onClick={toggleShirtSide}
+              variant="outline"
+              className="bg-blue-50 hover:bg-blue-100"
+              title={`Switch to ${isBackSide ? "Front" : "Back"} Side`}
+            >
+              <RotateCw
+                className={`transition-transform ${
+                  isBackSide ? "rotate-180" : ""
+                }`}
+              />
+            </Button>
           </div>
         </motion.div>
       )}
@@ -230,7 +278,7 @@ const Customizer = () => {
             {" "}
             <LockBtn />
             <Label className="text-center text-xs text-gray-700 ml-2">
-              3D View
+              3D View {isBackSide ? "(Back)" : "(Front)"}
             </Label>{" "}
           </>
         ) : (

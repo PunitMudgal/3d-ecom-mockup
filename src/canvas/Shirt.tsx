@@ -18,14 +18,30 @@ interface ShirtGLTF extends GLTF {
 useGLTF.preload("/shirt_baked.glb");
 
 const Shirt = () => {
-  const { color, isLogo, logoDecal, logoPosition, logoScale, logoRotation } =
-    TheStore();
+  const {
+    color,
+    isLogo,
+    logoDecal,
+    logoPosition,
+    logoScale,
+    logoRotation,
+    isBackSide,
+    isBackLogo,
+    backLogoDecal,
+    backLogoPosition,
+    backLogoScale,
+    backLogoRotation,
+  } = TheStore();
+
   const { nodes, materials } = useGLTF(
     "/shirt_baked.glb"
   ) as unknown as ShirtGLTF;
 
   const logoTexture = useTexture(logoDecal);
-  logoTexture.anisotropy = 16; // added here
+  const backLogoTexture = useTexture(backLogoDecal);
+
+  logoTexture.anisotropy = 16;
+  backLogoTexture.anisotropy = 16;
 
   useFrame((state, delta) => {
     if (materials?.lambert1?.color) {
@@ -40,6 +56,12 @@ const Shirt = () => {
     logoPosition,
     logoScale,
     logoRotation,
+    isBackSide,
+    isBackLogo,
+    backLogoDecal,
+    backLogoPosition,
+    backLogoScale,
+    backLogoRotation,
   });
 
   return (
@@ -50,19 +72,27 @@ const Shirt = () => {
         material={materials?.lambert1}
         material-roughness={1}
         dispose={null}
+        rotation={isBackSide ? [0, Math.PI, 0] : [0, 0, 0]}
       >
-        {isLogo && logoTexture && (
+        {/* Front Logo */}
+        {isLogo && logoTexture && !isBackSide && (
           <Decal
-            // position={[0, 0.04, 0.15]}
-            // rotation={[0, 0, 0]}
-            // scale={0.15}
             position={logoPosition}
             rotation={logoRotation}
             scale={logoScale}
             map={logoTexture}
-            // mapAnisotropy={16}
             depthTest={false}
-            // depthWrite={true}
+          />
+        )}
+
+        {/* Back Logo */}
+        {isBackLogo && backLogoTexture && isBackSide && (
+          <Decal
+            position={backLogoPosition}
+            rotation={backLogoRotation}
+            scale={backLogoScale}
+            map={backLogoTexture}
+            depthTest={false}
           />
         )}
       </mesh>

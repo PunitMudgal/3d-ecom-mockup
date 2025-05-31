@@ -11,28 +11,70 @@ const LogoControls = () => {
     logoPosition,
     logoScale,
     logoRotation,
+    backLogoPosition,
+    backLogoScale,
+    backLogoRotation,
+    isBackSide,
     setLogoPosition,
     setLogoScale,
     setLogoRotation,
+    setBackLogoPosition,
+    setBackLogoScale,
+    setBackLogoRotation,
     resetLogoTransform,
+    resetBackLogoTransform,
   } = TheStore();
 
+  // Get current values based on which side is active
+  const currentPosition = isBackSide ? backLogoPosition : logoPosition;
+  const currentScale = isBackSide ? backLogoScale : logoScale;
+  const currentRotation = isBackSide ? backLogoRotation : logoRotation;
+
   const handlePositionChange = (axis: number, value: number[]) => {
-    const newPosition = [...logoPosition] as [number, number, number];
+    const newPosition = [...currentPosition] as [number, number, number];
     newPosition[axis] = value[0];
-    setLogoPosition(newPosition);
+
+    if (isBackSide) {
+      setBackLogoPosition(newPosition);
+    } else {
+      setLogoPosition(newPosition);
+    }
   };
 
   const handleRotationChange = (axis: number, value: number[]) => {
-    const newRotation = [...logoRotation] as [number, number, number];
+    const newRotation = [...currentRotation] as [number, number, number];
     newRotation[axis] = (value[0] * Math.PI) / 180; // Convert degrees to radians
-    setLogoRotation(newRotation);
+
+    if (isBackSide) {
+      setBackLogoRotation(newRotation);
+    } else {
+      setLogoRotation(newRotation);
+    }
+  };
+
+  const handleScaleChange = (value: number[]) => {
+    if (isBackSide) {
+      setBackLogoScale(value[0]);
+    } else {
+      setLogoScale(value[0]);
+    }
+  };
+
+  const handleReset = () => {
+    if (isBackSide) {
+      resetBackLogoTransform();
+    } else {
+      resetLogoTransform();
+    }
   };
 
   return (
     <Card className="border-gray-400/20 p-2 bg-gray-100/60 shadow-lg">
       <CardHeader className="font-semibold text-xl text-center">
         Logo Controls
+        <div className="text-sm text-gray-600 mt-1">
+          {isBackSide ? "Back Side" : "Front Side"}
+        </div>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Position Controls */}
@@ -46,7 +88,7 @@ const LogoControls = () => {
             <div>
               <Label className="text-xs text-gray-600">Horizontal (X)</Label>
               <Slider
-                value={[logoPosition[0]]}
+                value={[currentPosition[0]]}
                 onValueChange={(value) => handlePositionChange(0, value)}
                 min={-0.3}
                 max={0.3}
@@ -54,14 +96,14 @@ const LogoControls = () => {
                 className="w-full"
               />
               <span className="text-xs text-gray-500">
-                {logoPosition[0].toFixed(2)}
+                {currentPosition[0].toFixed(2)}
               </span>
             </div>
 
             <div>
               <Label className="text-xs text-gray-600">Vertical (Y)</Label>
               <Slider
-                value={[logoPosition[1]]}
+                value={[currentPosition[1]]}
                 onValueChange={(value) => handlePositionChange(1, value)}
                 min={-0.2}
                 max={0.3}
@@ -69,7 +111,7 @@ const LogoControls = () => {
                 className="w-full"
               />
               <span className="text-xs text-gray-500">
-                {logoPosition[1].toFixed(2)}
+                {currentPosition[1].toFixed(2)}
               </span>
             </div>
           </div>
@@ -84,15 +126,15 @@ const LogoControls = () => {
 
           <div>
             <Slider
-              value={[logoScale]}
-              onValueChange={(value) => setLogoScale(value[0])}
+              value={[currentScale]}
+              onValueChange={handleScaleChange}
               min={0.05}
               max={0.4}
               step={0.01}
               className="w-full"
             />
             <span className="text-xs text-gray-500">
-              {logoScale.toFixed(2)}
+              {currentScale.toFixed(2)}
             </span>
           </div>
         </div>
@@ -108,7 +150,7 @@ const LogoControls = () => {
             <div>
               <Label className="text-xs text-gray-600">Z-axis (degrees)</Label>
               <Slider
-                value={[(logoRotation[2] * 180) / Math.PI]}
+                value={[(currentRotation[2] * 180) / Math.PI]}
                 onValueChange={(value) => handleRotationChange(2, value)}
                 min={-180}
                 max={180}
@@ -116,19 +158,15 @@ const LogoControls = () => {
                 className="w-full"
               />
               <span className="text-xs text-gray-500">
-                {Math.round((logoRotation[2] * 180) / Math.PI)}°
+                {Math.round((currentRotation[2] * 180) / Math.PI)}°
               </span>
             </div>
           </div>
         </div>
 
         {/* Reset Button */}
-        <Button
-          onClick={resetLogoTransform}
-          variant="outline"
-          className="w-full"
-        >
-          Reset to Default
+        <Button onClick={handleReset} variant="outline" className="w-full">
+          Reset {isBackSide ? "Back" : "Front"} to Default
         </Button>
       </CardContent>
     </Card>

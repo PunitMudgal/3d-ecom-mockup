@@ -10,6 +10,14 @@ interface store {
   logoScale: number;
   logoRotation: [number, number, number];
 
+  // New states for back side
+  isBackSide: boolean;
+  isBackLogo: boolean;
+  backLogoDecal: string;
+  backLogoPosition: [number, number, number];
+  backLogoScale: number;
+  backLogoRotation: [number, number, number];
+
   setEyeView: (value: boolean) => void;
   setColor: (value: string) => void;
   setIsLogo: (value: boolean) => void;
@@ -19,6 +27,15 @@ interface store {
   setLogoScale: (scale: number) => void;
   setLogoRotation: (rotation: [number, number, number]) => void;
   resetLogoTransform: () => void;
+
+  // New setters for back side
+  setIsBackSide: (value: boolean) => void;
+  setIsBackLogo: (value: boolean) => void;
+  setBackLogoDecal: (logoDecal: string) => void;
+  setBackLogoPosition: (position: [number, number, number]) => void;
+  setBackLogoScale: (scale: number) => void;
+  setBackLogoRotation: (rotation: [number, number, number]) => void;
+  resetBackLogoTransform: () => void;
 }
 
 export const TheStore = create<store>((set) => ({
@@ -30,6 +47,15 @@ export const TheStore = create<store>((set) => ({
   logoPosition: [0, 0.04, 0.15],
   logoScale: 0.15,
   logoRotation: [0, 0, 0],
+
+  // New default values for back side
+  isBackSide: false,
+  isBackLogo: false,
+  backLogoDecal: "./assets/spider.png",
+  backLogoPosition: [0, 0.04, -0.15], // negative Z for back positioning
+  backLogoScale: 0.15,
+  backLogoRotation: [0, Math.PI, 0], // 180 degree rotation for back
+
   setEyeView: (value) => set({ eyeView: value }),
   setColor: (value) => set({ color: value }),
   setIsLogo: (value) => set({ isLogo: value }),
@@ -43,5 +69,19 @@ export const TheStore = create<store>((set) => ({
       logoPosition: [0, 0.04, 0.15],
       logoScale: 0.15,
       logoRotation: [0, 0, 0],
+    }),
+
+  // New setters for back side
+  setIsBackSide: (value) => set({ isBackSide: value }),
+  setIsBackLogo: (value) => set({ isBackLogo: value }),
+  setBackLogoDecal: (logoDecal) => set({ backLogoDecal: logoDecal }),
+  setBackLogoPosition: (position) => set({ backLogoPosition: position }),
+  setBackLogoScale: (scale) => set({ backLogoScale: scale }),
+  setBackLogoRotation: (rotation) => set({ backLogoRotation: rotation }),
+  resetBackLogoTransform: () =>
+    set({
+      backLogoPosition: [0, 0.04, -0.15],
+      backLogoScale: 0.15,
+      backLogoRotation: [0, Math.PI, 0],
     }),
 }));
